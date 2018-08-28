@@ -1,6 +1,6 @@
 import subprocess
 import multiprocessing
-impor os, re, sys
+import os, re, sys
 
 def get_dir_fullpath():
     return input("Please drog a dirctory to here:").strip().strip('\'')
@@ -30,11 +30,18 @@ def mbuild_njtree(file_paths):
     pool = multiprocessing.Pool(processes=len(file_paths))
     pool.map(build_njtree, file_paths)
     
+def workflow0():
+    workdir = get_dir_fullpath()
+    files = get_files_fullPath(workdir, [".txt", ".fasta", ".fas"])
+    mbuild_njtree(files)
+
+    
 if __name__ == "__main__":
     do = 1
-    for do:
+    while do:
         i = input("Please put in a choice:").strip().strip('\'')
         if i == "do" or "exit":
             do = 0
+            
         else:
             continue
