@@ -23,7 +23,7 @@ def get_files_fullPath(directory_path, patterns):
 def build_njtree(file_path):
     this_script_name = sys.argv[0]
     this_script_dir_name = os.path.dirname(this_script_name)
-    subprocess.call(["megacc", "-a", this_script_dir_name + "\nj.mao", "-f", "Fasta", "-d", file_path,  "-o", os.path.splitext(file_path)[0]])
+    subprocess.call(["megacc", "-a", this_script_dir_name + "\\nj.mao", "-f", "Fasta", "-d", file_path,  "-o", os.path.splitext(file_path)[0]])
 
 
 def mbuild_njtree(file_paths):
@@ -42,6 +42,6 @@ if __name__ == "__main__":
         i = input("Please put in a choice:").strip().strip('\'')
         if i == "do" or "exit":
             do = 0
-            
+            workflow0()
         else:
             continue
