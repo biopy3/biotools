@@ -39,7 +39,7 @@ def workflow0():
 if __name__ == "__main__":
     do = 1
     while do:
-        i = input("Please put in a choice:").strip().strip('\'')
+        i = input("Please put in 'do' continue!").strip().strip('\'')
         if i == "do" or "exit":
             do = 0
             workflow0()
