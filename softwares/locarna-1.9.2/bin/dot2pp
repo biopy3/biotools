@@ -1,0 +1,79 @@
+#!/usr/bin/env perl
+
+=head1 NAME
+
+dot2pp
+
+=head1 SYNOPSIS
+
+dot2pp <infile.dp_ps >outfile.pp
+
+=head1 DESCRIPTION
+
+Convert a dot plot file (like produced by RNAfold -p) to a pp2.0 file,
+which is an locarna proprietary format for representing dot plots.
+Reads dotplot from stdin and write pp file to stdout.
+
+=head1 OPTIONS
+
+=over 1
+
+=item  B<--help>                        Brief help message
+
+=item  B<--man>                         Full documentation
+
+=item  B<--name=s>                      Sequence name
+
+=back
+
+
+=cut
+
+use warnings;
+use strict;
+
+##------------------------------------------------------------
+## options
+use Getopt::Long;
+use Pod::Usage;
+
+my $help;
+my $man;
+
+my $name="seq";
+
+## Getopt::Long::Configure("no_ignore_case");
+
+GetOptions(
+    "help"=> \$help,
+    "man" => \$man,
+    "name=s" => \$name
+    ) || pod2usage(2);
+
+pod2usage(1) if $help;
+pod2usage(-exitstatus => 0, -verbose => 2) if $man;
+
+## ------------------------------------------------------------
+## main part
+
+
+## convert a dotplot ps file to a pp file
+
+while (my $line=<STDIN>) {
+    if ( $line =~ /^\/sequence/ ) {
+	my $sequence="";
+	while (($line=<STDIN>) !~ /def$/ ) {
+	    $line =~ s/[^UACTG]//g;
+	    $sequence.=$line;
+	}
+	print "#PP 2.0\n\n$name $sequence\n\n#END\n\n#SECTION BASEPAIRS\n\n";
+    } elsif( $line =~ /(\d+)\s+(\d+)\s+([\d.]+)\s+ubox/ ) {
+	my $i=$1;
+	my $j=$2;
+	my $pij=$3*$3;
+	print "$i $j $pij\n";
+    } else {
+	# print " > $line";
+    }
+}
+print "\n#END\n";
