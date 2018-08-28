@@ -4,7 +4,7 @@ FROM ubuntu:latest
 # The author information
 MAINTAINER RuiWang "wr695251173@gmail.com"
 
-ADD ./biotools /usr/biotools
+ADD ../biotools /usr/biotools
 
 # Set work dir
 WORKDIR /usr/biotools
