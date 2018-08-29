@@ -13,7 +13,7 @@ def set_softwarePATH():
         abspath = os.path.abspath(this_script_dir_name)
         if os.name == 'posix' and sys.version_info[0] == 3:
             os.environ['PATH'] += ':' + abspath + '/softwares'
-            os.environ['PATH'] += ':' + abspath + '/locarna-1.9.2/bin'
+            os.environ['PATH'] += ':' + abspath + '/softwares/locarna-1.9.2/bin'
     except:
         print("Sorry, this program can't add softwares path to \"PATH\" env.")
 
@@ -149,26 +149,42 @@ def deletree_for_modelselect(file_paths):
 def locarna(file_paths):
     for file_path in file_paths:
         try:
-	    output_dir = os.path.splitext(file_path)[0]
+            output_dir = os.path.splitext(file_path)[0]
             file_name = os.path.splitext(file_path)[0].split('/')[0]
-	    ps = subprocess.Popen(["mlocarna",file_path,"--tgtdir",output_dir+"_results/","--write-structure"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-	    output_lines = ps.stdout.readlines()
-	    error_lines = ps.stderr.readlines()
-	    f = open(output_dir+"_results/"+file_name+"_fold.txt","w")
-	    for line in output_lines:
-	        f.write(str(line,encoding = "utf-8"))
-	        f.close()
-	        f = open(output_dir+"_results/error_info.txt","w")
-	    for line in error_lines:
-	        f.write(str(line,encoding = "utf-8"))
-	        f.close()
+            ps = subprocess.Popen(["mlocarna",file_path,"--tgtdir",output_dir+"_results/","--write-structure"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            output_lines = ps.stdout.readlines()
+            error_lines = ps.stderr.readlines()
+            f = open(output_dir+"_results/"+file_name+"_fold.txt","w")
+            for line in output_lines:
+                f.write(str(line,encoding = "utf-8"))
+                f.close()
+                f = open(output_dir+"_results/error_info.txt","w")
+            for line in error_lines:
+                f.write(str(line,encoding = "utf-8"))
+                f.close()
 
         except:
-	    print("The file is wrong:"+input_file)
-	    continue
+            print("The file is wrong:"+file_path)
+            continue
 
-    
-def walkflow1():
+'''
+def build_njtree(file_path):
+    this_script_name = sys.argv[0]
+    this_script_dir_name = os.path.dirname(this_script_name)
+    subprocess.call(["megacc", "-a", this_script_dir_name + "\\nj.mao", "-f", "Fasta", "-d", file_path,  "-o", os.path.splitext(file_path)[0]])
+
+
+def mbuild_njtree(file_paths):
+    pool = multiprocessing.Pool(processes=len(file_paths))
+    pool.map(build_njtree, file_paths)
+        
+def workflow0():
+    workdir = get_dir_fullpath()
+    files = get_files_fullPath(workdir, [".txt", ".fasta", ".fas"])
+    mbuild_njtree(files)
+ '''
+
+def workflow0():
     set_softwarePATH()
 
     main_path = get_dir_fullpath()
@@ -184,10 +200,10 @@ def walkflow1():
     aln_files = get_files_fullPath(main_path, ["_aln.fasta"])
     fasta2phy(aln_files)
 
-    phy_files = get_file_fullpath(main_path, ["_aln.phy"])
+    phy_files = get_files_fullPath(main_path, ["_aln.phy"])
     mphyml(phy_files)
     
-def walkflow2():
+def workflow1():
     set_softwarePATH()
 
     main_path = get_dir_fullpath()
@@ -201,31 +217,37 @@ def walkflow2():
     RNAalifold2fas_struct_rna(files)
     
     return
-                    
+
 if __name__ == "__main__":
     
     do = 1
-    for do:
+    while do:
         print("Explain:\n\
-        Usages: <workfolw>
+        Usages: <workfolw>\n\
+         Workflow0,<flow1>:\n\
+        0. Put the file of input under the directory of same name without file extersion.\n\
+        1. Megacc 7.0 buid njtree!\n\
+        \n\
         Workflow1,<flow1>:\n\
-        0. Put the file 0f input under the directory of same name without file extersion.\n\
+        0. Put the file of input under the directory of same name without file extersion.\n\
         1. Align degap file --> *_aln.fasta\n\
-        2. Convert _aln.fasta to *_aln.phy (No limitation of 10 characters)\n\ 
+        2. Convert _aln.fasta to *_aln.phy [No limitation of 10 characters]\n\
         3. Build ML-tree using .phy format file\n\
         4. Finished, enjoy it!\n\
-        
+        \n\
         Workflow2<flow2>:\n\
         0. As same as above.\n\
         1. Compute it using mlocarna of locarna.\n\
-        2. Transform *_fold.txt to three files (.rna, .fa && .structure.txt).\n\
+        2. Transform *_fold.txt to three files [.rna, .fa && .structure.txt].\n\
         3. Ended!\n")
-        user_choiced = input("Please chose a workflow <workflow1 or workflow2>:\n").strip().strip('\'')
-        if user_choiced == "workflow1":
-            walkflow1()
+        user_choiced = input("Please chose a workflow <wf0 or wf1>:\n").strip().strip('\'')
+        if user_choiced == "wf0":
+            workflow0()
             do = 0
-        elif:
-            walkflow2()
-            do = 1
-        else:
+        elif user_choiced == "wf1":
+            workflow1()
+            do = 0
+        elif user_choiced == "exit":
+            do = 0
+        else :
             continue
