@@ -1,0 +1,47 @@
+# This file created by conda-build 2.1.16
+# meta.yaml template originally from:
+# /opt/recipe, last modified Tue Jul  4 16:04:59 2017
+# ------------------------------------------------
+
+package:
+    name: locarna
+    version: 1.9.2
+source:
+    fn: locarna-1.9.2.tar.gz
+    sha256: 14aabc5425f5090bf1bcaa61c2db41f659e55dd40100db117fb9e40470b4a2b5
+    url: https://github.com/s-will/LocARNA/releases/download/v1.9.2/locarna-1.9.2.tar.gz
+build:
+    noarch: ''
+    noarch_python: false
+    number: '0'
+    string: pl5.22.0_0
+requirements:
+    build:
+        - libgcc 5.2.0 0
+        - cloog 0.18.0 0
+        - isl 0.12.2 0
+        - mpfr 3.1.5 0
+        - gcc 4.8.5 7
+        - gmp 6.1.2 0
+        - viennarna 2.3.5 0
+        - mpc 1.0.3 4
+    run:
+        - viennarna ==2.3.5
+        - perl
+        - libgcc
+test:
+    commands:
+        - mlocarna --version
+        - locarna --version
+        - locarna_p --version
+        - sparse --version
+        - exparna_p --version
+        - echo -e ">D10744\nGGAAAAUUGAUCAUCGGCAAGAUAAGUUAUUUACUAAAUAAUAGGAUUUAAUAACCUGGUGAGUUCGAAUCUCACAUUUUCCG"
+            | locarna_rnafold_pp --in-loop --stacking --noLP -p0.5 |head -n3
+about:
+    home: http://www.bioinf.uni-freiburg.de/Software/LocARNA/
+    license: GPL
+    license_file: COPYING
+    summary: Multiple alignment of RNAs
+extra:
+    final: true

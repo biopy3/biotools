@@ -1,0 +1,11 @@
+prefix=/opt/anaconda1anaconda2anaconda3
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: LocARNA
+Description: LocARNA C++ library.
+Version: 1.9.2
+URL: http://www.bioinf.uni-freiburg.de/Software/LocARNA/
+Libs: -L${libdir} -lLocARNA-1.6  -fopenmp -L/opt/anaconda1anaconda2anaconda3/lib -lRNA      
+Cflags: -I${includedir}/LocARNA-1.6 -I/opt/anaconda1anaconda2anaconda3/include -I/opt/anaconda1anaconda2anaconda3/include/ViennaRNA    

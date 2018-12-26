@@ -1,0 +1,50 @@
+括号说明：
+「」括号里面的表示键入的命令
+（）括号里面的进行释义
+
+前提:
+
+1.开启docker,docker图标(小鲸鱼)正在启动中时会一直喷水,稳定后停止喷水(表示启动并部署好了)
+
+2.计算机连网（首次获取镜像（pull）时需要），在其键入「 docker pull wonray/biotools:1.9.2 」以获取我制作的镜像，
+本来标准的命令是「docker pull wonray/biotools:tag 」, 其中的tag表示标签，也就是不同版本，如果我们
+没有指定标签docker就默认使用latest标签，其实也就是「docker pull wonray/biotools 」等于
+「docker pull wonray/biotools:latest 」,不知道也没关系，想仔细了解可以看docker官方文档，
+等待其获取完全，如果卡住了等一下，实在不行就关闭重来。
+可用「 docker images 」查看本地都获取了哪些镜像。
+镜像获取后已经存在本地了，就不再需要联网了，(这一步之需要执行一次,只要pull下来在本地就行了)
+
+
+计算步骤:
+
+step1:
+非管理员权限打开powershell（就是普通的打开），当前工作目录默认会在你账户的
+家目录（home目录）下，也就是你桌面的user（你的用户文件夹）文件夹下。
+
+step2:
+切换目录（cd）到Ducuments目录下，切换到哪里无
+所谓，目的是方便后面运行docker挂载本地目录到docker运行的容器里，需要用$PWD这
+个系统变量，就表示当前工作目录，当前工作目录不需要解释了吧，把待运算的文件夹
+放在Documents目录下面，注意待运算文件夹名字不要用中文，不要用一些“奇奇怪怪”的
+字符。
+
+step4:将你需要计算的配置文件放在Documents目录下,配置文件的名字为:config.txt,
+配置文件千万不要输入中文字符,这是常识。
+
+step5:
+在其键入「 docker run -it --rm -v ${PWD}:/bio  wonray/biotools:1.9.2 」后，你就进入了docker
+容器里面的ubuntu环境了，注意此时你的powershell显示的是Ubuntu容器环境了。
+
+step6:
+键入「 cp /bio/config.txt /usr/biotools/config.cfg 」,将你自己的配置文件拷贝一下，如不执行
+此拷贝，那么将默认用docker内置的配置文件。
+
+
+step7:
+在其键入「 python3.6 biotools-commands.py 」，输入wf0后(目前只有wf0和wf1可以用)，
+再在其输入「 /bio/* 」，这里的*指的是之前你在Documents下面放置的需要运算的文件
+夹的名字，运算开始。
+
+step8:
+运算完成之后，键入「 exit 」退出容器。
+
